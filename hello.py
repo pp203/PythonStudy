@@ -1,1 +1,1 @@
-print("seinaydb")
+print("seinayamada")
