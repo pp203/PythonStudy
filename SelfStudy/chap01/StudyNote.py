@@ -1,3 +1,15 @@
+## PythonShell を呼び出す
+'''
+$ python3
+
+>>>
+'''
+
+## PythonShell を終了する
+'''
+>>> exit()
+'''
+
 name = 'seina'
 # 名前を表示
 print(name)
