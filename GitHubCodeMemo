@@ -3,7 +3,7 @@ git pull
 
 
 ## ローカルリポジトリにコミット
-git add
+git add .
 
 git commit -m "<commit message>"
 
