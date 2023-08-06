@@ -577,3 +577,98 @@ $ python3 format02.py
 ```
 
 **リスト**
+* 複数の値を収めることができる
+* 仕切りのある入れ物的な
+* 要素 = 仕切りで区切られたスペース
+* 0 から数える
+* [] でリストは作成する
+  * [] でくくられた部分は **インデックス番号** と呼ばれる  
+
+list_basic.py
+```
+data = ['Toronto', 'Tokyo', 'Seattle', 'London']
+
+print(data[2])  # 0 から数えるので Seattle が表示される
+```
+
+実行結果
+```
+$ python3 list_basic.py 
+
+Seattle
+```
+
+リストの個々の要素に当たらな値を設定することも可能
+
+list01.py
+```
+data = ['Toronto', 'Tokyo', 'Seattle', 'London']
+data[2] = 'Dubai'
+
+print(data[2])  
+```
+
+実行結果
+```
+$ python3 list01.py 
+
+Dubai
+```
+
+一方で、要素を __追加__ することはできない
+
+list_error.py
+```
+data = ['Toronto', 'Tokyo', 'Seattle', 'London']
+data[4] = 'Dubai'
+
+print(data[4])
+```
+
+実行結果
+```
+$ python3 list_error.py 
+
+Traceback (most recent call last):
+  File "/Users/seinay/VSCode/GitHub/PythonStudy/list_error.py", line 2, in <module>
+    data[4] = 'Dubai'
+    ~~~~^^^
+IndexError: list assignment index out of range
+```
+
+リストを 1 行で表す時には最後に ',' は基本的には必要ない。
+
+list02.py
+```
+data = ['Toronto', 'Tokyo', 'Seattle', 'London',]  # この場合は、あってもなくても問題ない
+
+print(data[1])
+```
+
+実行結果
+```
+$ python3 list02.py 
+
+Tokyo
+```
+
+リストに複数行で表す時には最後に ',' つけた方が見やすくなる
+
+list03.py
+```
+data = ['Toronto', 
+        'Tokyo', 
+        'Seattle', 
+        'London',
+]  
+
+print(data[1])
+```
+
+実行結果
+```
+$ python3 list03.py 
+
+Tokyo
+```
+
