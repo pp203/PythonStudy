@@ -1,0 +1,1 @@
+print("He\s 'GREATE' teacher")

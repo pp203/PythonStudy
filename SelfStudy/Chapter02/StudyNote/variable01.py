@@ -1,0 +1,2 @@
+test = 'seina'
+print(test)
