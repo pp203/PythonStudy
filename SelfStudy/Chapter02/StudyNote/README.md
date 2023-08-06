@@ -1,4 +1,4 @@
-# Python の基礎
+# Chapter 02. Python の基礎
 
 ## 2.1. 変数
 **変数**  
