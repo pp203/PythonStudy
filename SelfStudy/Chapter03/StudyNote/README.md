@@ -240,6 +240,250 @@ True
 1010 (00001010)  
 101000 (00101000)
 
+---
+### 数値のインクリメント/デクリメント　　
+* インクリメント演算子：与えられたオペランドに対して 1 を加算すること
+* デクリメント演算子：与えられたオペランドに対して 1 を減算すること
+* ただし、「++」「--」演算子は <ins>Python には存在しない。
+* その代わり、「+=」「-=」演算子を利用する。
+
+inc_op01.py
+```
+# i++ ←→ i = i + 1
+# i-- ←→ i = i - 1
+
+i = 1
+
+i += 1
+print(i)
+
+i -= 1
+print(i)
+```
+
+実行結果
+```
+$ python3 inc_op01.py
+
+2
+1
+```
+
+5 ずつ増やす/減らすこともできる
+```
+i += 5
+i -= 5
+```
+
+---
+### 「=」演算子による代入は参照の引き渡し
+* 参照/識別値：格納場所を表す情報のこと
+* 変数には値の格納場所を表す情報を格納する。
+* → 実際の値は、別の場所に格納されているということ。
+
+ref_id.py
+```
+num1 = 10
+num2 = num1
+
+print(id(num1))
+print(id(num2))
+```
+
+実行結果
+```
+$ python3 ref_id.py 
+
+4309034152
+4309034152
+```
+
+---
+### ミュータブルとイミュータブル
+* ミュータブル：変更可能な型。オブジェクトをそのまま中身だけを変更できる。
+* イミュータブル：変更不可な型。一度作成したオブジェクトの中身を書き換えることはできない。値を変更するにはオブジェクトそのものを入れ替えなければならない。
+
+assign01.py
+```
+# ミュータブル型
+data1 = [1,2,3]
+data2 = data1
+data1[0] = 100
+
+print(data1)
+print(data2)
+
+# イミュータブル型
+x = 1
+y = x
+x += 10
+
+print(x)
+print(y)
+```
+
+実行結果
+```
+$ python3 assign01.py 
+
+[100, 2, 3]
+[100, 2, 3]
+11
+1
+```
+
+ミュータブルな型であっても、値そのものを差し替えた場合は異なるオブジェクトとなる。
+
+assign02.py
+```
+data1 = [1,2,3]
+data2 = data1
+data1 = [4,5,6]  # 別のオブジェクトで置き換え
+
+print(data1)
+print(data2)
+```
+
+実行結果
+```
+$ python3 assign02.py 
+
+[4, 5, 6]
+[1, 2, 3]
+```
+
+---
+### アンパック代入
+リスト/辞書などを分解し、配下の要素を個々の変数に分解するための構文  
+左辺に要素の数だけ変数を列挙する
+
+右辺のリッストがここの要素に分解され、それぞれ対応する変数 a - e に代入される  
+
+unpack01.py
+```
+data = [1,2,3,4,5]
+a,b,c,d,e = data
+
+print(a)
+print(b)
+print(c)
+print(d)
+print(e)
+```
+
+実行結果
+```
+$ python unpack01.py
+
+1
+2
+3
+4
+5
+```
+
+上記の場合、左辺の変数と右辺 (リスト) の要素数は一致していなければいけない。  
+以下の場合はエラーが出力される。
+
+unpack_error01.py
+```
+data = [1,2,3,4,5]
+a,b,c = data  # リスト要素が変数よりも多い
+```
+
+実行結果
+```
+$ python unpack_error01.py
+
+Traceback (most recent call last):
+  File "/Users/seinay/VSCode/GitHub/PythonStudy/SelfStudy/Chapter02/StudyNote/unpack_error01.py", line 2, in <module>
+    a,b,c = data  # リスト要素が変数よりも多い
+    ^^^^^
+ValueError: too many values to unpack (expected 3)
+```
+
+unpack_error02.py
+```
+data = [1,2,3,4,5]
+a,b,c,d,e,f = data  # リスト要素が変数よりも少ない
+```
+
+実行結果
+```
+$ python3 unpack_error02.py
+
+Traceback (most recent call last):
+  File "/Users/seinay/VSCode/GitHub/PythonStudy/SelfStudy/Chapter02/StudyNote/unpack_error02.py", line 2, in <module>
+    a,b,c,d,e,f = data  # リスト要素が変数よりも少ない
+    ^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 6, got 5)
+```
+
+---
+### 残りの要素をまとめて代入する
+変数に * を付与することで個々の変数に分解されなかった残りの要素をまとめてリストとして切り出すことができる
+
+unpack02.py
+```
+data = [1,2,3,4,5]
+m,n,*o = data
+
+print(m)
+print(n)
+print(0)
+
+r,*s,t = data
+
+print(r)
+print(s)
+print(t)
+
+*x,y,z, = data
+
+print(x)
+print(y)
+print(z)
+```
+
+実行結果
+```
+$  python3 unpack02.py 
+
+1
+2
+0
+1
+[2, 3, 4]
+5
+[1, 2, 3]
+4
+5
+```
+
+\* 付き変数で該当する要素がない時、空のリストが生成される
+
+unpack03.py
+```
+data = [1,2]
+a,b,*c = data
+
+print(c)
+```
+
+実行結果
+```
+$ python3 unpack03.py 
+
+[]
+```
+
+---
+### 一部の要素を切り捨てる
+
+
+
+
+
 
 
 ## 3.3. 比較演算子
