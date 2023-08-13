@@ -119,5 +119,35 @@ while True:
     else:
         break
 
-## 4. for 命令と continue 命令を使い、100 ~ 200 の範囲
+## 4. for 命令と continue 命令を使い、100 ~ 200 の範囲にある奇数値の合計を求めよ。
 
+sum = 0
+    
+for i in range(100, 201):
+    if i % 2 != 0:
+        sum += i
+    continue
+
+print(sum)
+
+# sum = 0
+    
+# for i in range(100, 201):
+#     if i % 2 == 0:
+#         continue
+#     sum += i
+
+# print(sum)
+
+## 5. 変数 language の値が「Python」「Perl」「Ruby」であれば「インタプリンター言語」、「C#」「C++」「Java」であれば「コンパイル言語」、さもなくば「不明」と表示するコードを作成せよ。
+
+langauge = 'Python'
+langauge1 = ['Python','Perl','Ruby']
+language2 = ['Ruby','C#','C++','Java']
+
+if langauge in langauge1:
+    print('インタプリンター言語')
+elif langauge in language2:
+    print('コンパイル言語')
+else:
+    print('不明')

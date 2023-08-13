@@ -1,8 +1,10 @@
-while True:
-    try:
-        num = input('数値を入力')
-        print('1.5 倍にすると...', float(num) * 1.5)
-    except ValueError:
-        print('入力エラー')
-    else:
-        break
+langauge = 'Python'
+langauge1 = ['Python','Perl','Ruby']
+language2 = ['Ruby','C#','C++','Java']
+
+if langauge in langauge1:
+    print('インタプリンター言語')
+elif langauge in language2:
+    print('コンパイル言語')
+else:
+    print('不明')
