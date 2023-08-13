@@ -20,7 +20,7 @@
 文字列同士の「+」演算は、加算ではなく **連結** とみなす。
 
 alg_op01.py
-```
+```py
 print('10' + '3')
 
 print('こんにちは' + '赤ちゃん')
@@ -38,7 +38,7 @@ $ python3 alg_op01.py
 「文字列 * n」=「文字列を n 回繰り返した文字列」
 
 alg_op02.py
-```
+```py
 print('こんにちは' * 3)
 ```
 
@@ -57,7 +57,7 @@ $ python3 alg_op02.py
 <ins>Python では数値と文字列の組み合わせはできない。
 
 alg_op_error01.py
-```
+```py
 print(15 + '30')
 ```
 
@@ -75,7 +75,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'
 「int」や「str」などの関数で型を変換することで演算可能。
 
 alg_op03.py
-```
+```py
 print(15 + int('30'))
 
 print(str(15) + '30')
@@ -94,7 +94,7 @@ $ python3 alg_op03.py
 * 「//」= float 同士の除算でも整数を返す。
 
 alg_op04.py
-```
+```py
 print(5 / 3)
 print(5 // 3)
 ```
@@ -111,8 +111,9 @@ divmod
 整数部の商と剰余をまとめて表示できる
 
 alg_op05.py
-```
-print(divmod(5,3))  # 5 / 3 して「1」が商で、「2」が余りになる。
+```py
+print(divmod(5,3))  
+# 5 / 3 して「1」が商で、「2」が余りになる。
 ```
 
 実行結果
@@ -127,7 +128,7 @@ $ python3 alg_op05.py
 Python が内部的に数値を 10 進数ではなく、2 進数で演算してしまっているから。  
 
 alg_op06.py
-```
+```py
 print(0.2 * 3)
 
 print(0.2 * 3 == 0.6)
@@ -148,7 +149,7 @@ False
 * Decimal の値は、文字列リテラルとして指定することが原則
 
 alg_op07.py
-```
+```py
 import decimal
 
 d1 = decimal.Decimal('0.2')
@@ -243,7 +244,7 @@ True
 * その代わり、「+=」「-=」演算子を利用する。
 
 inc_op01.py
-```
+```py
 # i++ ←→ i = i + 1
 # i-- ←→ i = i - 1
 
@@ -276,7 +277,7 @@ i -= 5
 * → 実際の値は、別の場所に格納されているということ。
 
 ref_id.py
-```
+```py
 num1 = 10
 num2 = num1
 
@@ -297,7 +298,7 @@ $ python3 ref_id.py
 * イミュータブル：変更不可な型。一度作成したオブジェクトの中身を書き換えることはできない。値を変更するにはオブジェクトそのものを入れ替えなければならない。
 
 assign01.py
-```
+```py
 # ミュータブル型
 data1 = [1,2,3]
 data2 = data1
@@ -328,7 +329,7 @@ $ python3 assign01.py
 ミュータブルな型であっても、値そのものを差し替えた場合は異なるオブジェクトとなる。
 
 assign02.py
-```
+```py
 data1 = [1,2,3]
 data2 = data1
 data1 = [4,5,6]  # 別のオブジェクトで置き換え
@@ -352,7 +353,7 @@ $ python3 assign02.py
 右辺のリッストがここの要素に分解され、それぞれ対応する変数 a - e に代入される  
 
 unpack01.py
-```
+```py
 data = [1,2,3,4,5]
 a,b,c,d,e = data
 
@@ -378,7 +379,7 @@ $ python unpack01.py
 以下の場合はエラーが出力される。
 
 unpack_error01.py
-```
+```py
 data = [1,2,3,4,5]
 a,b,c = data  # リスト要素が変数よりも多い
 ```
@@ -395,7 +396,7 @@ ValueError: too many values to unpack (expected 3)
 ```
 
 unpack_error02.py
-```
+```py
 data = [1,2,3,4,5]
 a,b,c,d,e,f = data  # リスト要素が変数よりも少ない
 ```
@@ -415,7 +416,7 @@ ValueError: not enough values to unpack (expected 6, got 5)
 変数に * を付与することで個々の変数に分解されなかった残りの要素をまとめてリストとして切り出すことができる
 
 unpack02.py
-```
+```py
 data = [1,2,3,4,5]
 m,n,*o = data
 
@@ -454,7 +455,7 @@ $  python3 unpack02.py
 \* 付き変数で該当する要素がない時、空のリストが生成される
 
 unpack03.py
-```
+```py
 data = [1,2]
 a,b,*c = data
 
@@ -473,7 +474,7 @@ $ python3 unpack03.py
 * ただし、変数 '_' に代入しているというだけなので最後の値が表示される
 
 unpack04.py
-```
+```py
 data = [1,2,3,4,5]
 a,_,b,_,c = data
 
@@ -496,7 +497,7 @@ $ python3 unpack04.py
 ### 入れ子のリストをアンパックする
 
 unpack05.py
-```
+```py
 data = [1,2,[31,32,33]]
 
 a,b,c = data
@@ -534,7 +535,7 @@ $ python3 unpack05.py
 アンパック代入を利用しない場合は、いずれかの変数を一旦別の変数に対比させる必要がある。
 
 unpack06.py
-```
+```py
 x = 15
 y = 38
 x,y = y,x
@@ -556,7 +557,7 @@ $ python unpack06.py
 なので「x = 20」という文を 10 で割ることができないから。
 
 substi_op_error.py
-```
+```py
 y = (x = 20) / 10
 
 print(y)
@@ -575,7 +576,7 @@ SyntaxError: invalid syntax. Maybe you meant '==' or ':=' instead of '='?
 なので、Python の場合は以下となる。
 
 substi_op.py
-```
+```py
 y = (x := 20) / 10
 
 print(y)
@@ -607,7 +608,7 @@ is [not] について
 * 同じ値でも別のオブジェクトを生成しているので上記の場合 False となる。
 
 compare_op01.py
-```
+```py
 x = [1, 2]
 y = [1, 2]
 
@@ -640,7 +641,7 @@ True
 * 数値同士の場合は例外。int 型と float 型とは数値として正しく等価/大小を判定できる。
 
 compare_op02.py
-```
+```py
 print(1 == '1')
 print(False == None)
 
@@ -663,7 +664,7 @@ False
 * 例02：「'15' < '131'」の場合、str 型として認識するので、先頭の「1」は同じ、次の「5 > 3」を比較するので答えは False と確実な答えが出る。
 
 compare_op03.py
-```
+```py
 print(15 < 131)
 print('15' < '131')
 ```
@@ -689,7 +690,7 @@ False
 * メモ：「辞書」については大小比較はできない。
 
 compare_op04.py
-```
+```py
 data1 = [1, 2, 3]
 data2 = [1, 5]
 data3 = [1, 2]
@@ -721,7 +722,7 @@ False
 * <= EPSILON とかもできる
 
 compare_op05.py
-```
+```py
 EPSILON = 0.00001
 x = 0.2 * 3
 y = 0.6
@@ -788,7 +789,7 @@ shortcut01.py の場合、同じ意味になる。
 2) 左式が False である場合のみ、メッセージを表示するという意味。
 
 shortcut01.py
-```
+```py
 x = 1
 
 if x != 2:
