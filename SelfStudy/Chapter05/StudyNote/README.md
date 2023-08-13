@@ -117,11 +117,153 @@ $ python3 sort_method.py
 # 結果は同じ
 ```
 
+---
 
+### *5.1.3. 組み込み型/関数とモジュール*
+インポート：対象のモジュールを読み込むこと
 
+構文例
+```py
+import モジュール名
+```
 
+import.py
+```py
+import math
+
+print(math.floor(1.34))
+```
+
+実行結果
+```shell
+$ python3 import.py
+
+1
+```
 
 
 ## 5.2. 文字列の操作
+### *5.2.1. 文字列の長さを取得する*
+
+str_len.py
+```py
+title1 = 'プロジェクト'
+print(len(title1))
+
+
+title2 = 'testtitle'
+print(len(title2))
+
+
+import unicodedata
+print(unicodedata.east_asian_width('あ'))
+```
+
+実行結果
+```shell
+$ python3 str_len.py
+
+6
+9
+W  # W = 全角かな
+<class 'str'>
+
+# 日本語を正しく 1 文字としてカウントする
+```
+
+east_asian_width 関数の戻り値
+| 分類 | 戻り値 | 意味 |
+| --- | --- | --- |
+| 全角 | F | Fullwidth (全角英数など) |
+| 全角 | W | Wide (漢字や全角かななど) |
+| 全角 | A | Ambiguous (特殊文字) |
+| 半角 | Na | Narrow (半角英数など) |
+| 半角 | H | Halfwidth (半角カタカナなど) |
+| 半角 | N | Neutral (中立：いずれにも属さない) |
+
+→ 戻り値が「F」「W」「A」の場合は文字幅を 2、それ以外は 1 としてカウント
+
+str_len_width.py
+```py
+import unicodedata
+
+data = 'WINGS プロジェクト 2020'
+count = 0
+
+for i in data:
+    if unicodedata.east_asian_width(i) in 'FWA':
+        count += 2
+    else:
+        count += 1
+
+print(count)
+```
+
+実行結果
+```shell
+$ python3 str_len_width.py 
+
+23
+
+# WINGS = 5
+# プロジェクト = 12
+# 2020 = 4
+# スペース * 2 = 2
+```
+
+---
+
+### *5.2.2. 文字列を大文字小文字で変換する*
+大文字/小文字の変換メソッド
+| メソッド | 概要 |
+| --- | --- |
+| lower() | 大文字 → 小文字に変換 |
+| upper() | 小文字 → 大文字に変換 |
+| swapcase() | 大文字と小文字を反転 |
+| capitalize() | 先頭文字を大文字に、以降を小文字に変換 |
+| title() | 単語の先頭文字を大文字に、それ以外を小文字に変換 |
+| casefold() | 大文字小文字の区別を除去 |
+
+---
+
+### *5.2.3. 部分文字列を取得する*
+
+---
+
+### *5.2.4. 文字の種類を判定する*
+
+---
+
+### *5.2.5. 文字列を検索する*
+
+---
+
+### *5.2.6. 文字列の前後から空白を除去する*
+
+---
+
+### *5.2.7. 文字列に特定の文字列が含まれるかを判定する*
+
+---
+
+### *5.2.8. 文字列を特定の区切り文字で分割する*
+
+---
+
+### *5.2.9. リストを結合する*
+
+---
+
+### *5.2.10. 文字列を置き換える*
+
+---
+
+### *5.2.11. 文字を整形する*
+
+---
+
+### *5.2.12. str 型 bytes 型を変換する*
+
+---
 
 ## 5.3. 日付/時刻の操作
