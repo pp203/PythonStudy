@@ -181,8 +181,6 @@ east_asian_width 関数の戻り値
 | 半角 | H | Halfwidth (半角カタカナなど) |
 | 半角 | N | Neutral (中立：いずれにも属さない) |
 
-→ 戻り値が「F」「W」「A」の場合は文字幅を 2、それ以外は 1 としてカウント
-
 str_len_width.py
 ```py
 import unicodedata
@@ -192,9 +190,9 @@ count = 0
 
 for i in data:
     if unicodedata.east_asian_width(i) in 'FWA':
-        count += 2
+        count += 2  # 戻り値が「F」「W」「A」の場合は文字幅を 2 としてカウント
     else:
-        count += 1
+        count += 1  # それ以外は文字幅を 1 としてカウント
 
 print(count)
 ```
