@@ -144,7 +144,7 @@ $ python3 singlecomment_indent.py
 * elif は分岐の数だけ列記できる。
 
 構文例
-```
+```py
 if 条件式 1:
     ...条件式 1 が True の時、実行する処理...
 elif 条件式 2:
