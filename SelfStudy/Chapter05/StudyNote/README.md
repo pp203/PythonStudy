@@ -93,7 +93,7 @@ $ python3 datetimemodule.py
 ```
 
 sort_method.py
-```php:sort_method.py
+```py
 data1 = [25, 3, 49, 67, 14]
 
 data1.sort(reverse = True)  # sort メソッドを使う
@@ -106,7 +106,7 @@ print(sorted(data2, reverse = True))  # sorted 関数を使う
 ```
 
 実行結果
-```shell
+```
 $ python3 sort_method.py
 
 [67, 49, 25, 14, 3]
