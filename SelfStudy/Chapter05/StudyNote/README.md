@@ -1,6 +1,37 @@
 # Chapter 05. 標準ライブラリ
 ライブラリ：コードから自在に呼び出せる命令
 
+### [ 目次 ]
+5.1. [ライブラリの分類](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#51-%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E5%88%86%E9%A1%9E)
+
+- 5.1.1. [関数](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#511-%E9%96%A2%E6%95%B0)
+- 5.1.2. [型](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#512-%E5%9E%8B)
+- 5.1.3. [組み込み型/関数とモジュール](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#513-%E7%B5%84%E3%81%BF%E8%BE%BC%E3%81%BF%E5%9E%8B%E9%96%A2%E6%95%B0%E3%81%A8%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB)
+
+5.2. [文字列の操作](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#52-%E6%96%87%E5%AD%97%E5%88%97%E3%81%AE%E6%93%8D%E4%BD%9C)
+
+- 5.2.1. [文字列の長さを取得する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#521-%E6%96%87%E5%AD%97%E5%88%97%E3%81%AE%E9%95%B7%E3%81%95%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B)
+- 5.2.2. [文字列を大文字小文字で変換する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#522-%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E5%A4%A7%E6%96%87%E5%AD%97%E5%B0%8F%E6%96%87%E5%AD%97%E3%81%A7%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B)
+- 5.2.3. [部分文字列を取得する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#523-%E9%83%A8%E5%88%86%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B)
+- 5.2.4. [文字の種類を判定する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#524-%E6%96%87%E5%AD%97%E3%81%AE%E7%A8%AE%E9%A1%9E%E3%82%92%E5%88%A4%E5%AE%9A%E3%81%99%E3%82%8B)
+- 5.2.5. [文字列を検索する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#525-%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E6%A4%9C%E7%B4%A2%E3%81%99%E3%82%8B)
+- 5.2.6. [文字列の前後から空白を除去する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#526-%E6%96%87%E5%AD%97%E5%88%97%E3%81%AE%E5%89%8D%E5%BE%8C%E3%81%8B%E3%82%89%E7%A9%BA%E7%99%BD%E3%82%92%E9%99%A4%E5%8E%BB%E3%81%99%E3%82%8B)
+- 5.2.7. [文字列に特定の文字列が含まれるかを判定する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#527-%E6%96%87%E5%AD%97%E5%88%97%E3%81%AB%E7%89%B9%E5%AE%9A%E3%81%AE%E6%96%87%E5%AD%97%E5%88%97%E3%81%8C%E5%90%AB%E3%81%BE%E3%82%8C%E3%82%8B%E3%81%8B%E3%82%92%E5%88%A4%E5%AE%9A%E3%81%99%E3%82%8B)
+- 5.2.8. [文字列を特定の区切り文字で分割する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#528-%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E7%89%B9%E5%AE%9A%E3%81%AE%E5%8C%BA%E5%88%87%E3%82%8A%E6%96%87%E5%AD%97%E3%81%A7%E5%88%86%E5%89%B2%E3%81%99%E3%82%8B)
+- 5.2.9. [リストを結合する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#529-%E3%83%AA%E3%82%B9%E3%83%88%E3%82%92%E7%B5%90%E5%90%88%E3%81%99%E3%82%8B)
+- 5.2.10. [文字列を置き換える](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#5210-%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E7%BD%AE%E3%81%8D%E6%8F%9B%E3%81%88%E3%82%8B)
+- 5.2.11. [文字を整形する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#5211-%E6%96%87%E5%AD%97%E3%82%92%E6%95%B4%E5%BD%A2%E3%81%99%E3%82%8B)
+- 5.2.12. [str型bytes型を変換する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#5212-str-%E5%9E%8B-bytes-%E5%9E%8B%E3%82%92%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B)
+
+5.3. [日付/時刻の操作](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#53-%E6%97%A5%E4%BB%98%E6%99%82%E5%88%BB%E3%81%AE%E6%93%8D%E4%BD%9C)
+
+- 5.3.1. [日付/時刻値を生成する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#531-%E6%97%A5%E4%BB%98%E6%99%82%E5%88%BB%E5%80%A4%E3%82%92%E7%94%9F%E6%88%90%E3%81%99%E3%82%8B)
+- 5.3.2. [年月日、時分秒などの時刻要素を取得する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#532-%E5%B9%B4%E6%9C%88%E6%97%A5%E6%99%82%E5%88%86%E7%A7%92%E3%81%AA%E3%81%A9%E3%81%AE%E6%99%82%E5%88%BB%E8%A6%81%E7%B4%A0%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B)
+- 5.3.3. [日付/時刻を加算/減算する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#533-%E6%97%A5%E4%BB%98%E6%99%82%E5%88%BB%E3%82%92%E5%8A%A0%E7%AE%97%E6%B8%9B%E7%AE%97%E3%81%99%E3%82%8B)
+- 5.3.4. [日付/時刻値の差分を求める](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#534-%E6%97%A5%E4%BB%98%E6%99%82%E5%88%BB%E5%80%A4%E3%81%AE%E5%B7%AE%E5%88%86%E3%82%92%E6%B1%82%E3%82%81%E3%82%8B)
+- 5.3.5. [日付/時刻値を比較する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#535-%E6%97%A5%E4%BB%98%E6%99%82%E5%88%BB%E5%80%A4%E3%82%92%E6%AF%94%E8%BC%83%E3%81%99%E3%82%8B)
+- 5.3.6. [日付/時刻値を整形する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#536-%E6%97%A5%E4%BB%98%E6%99%82%E5%88%BB%E5%80%A4%E3%82%92%E6%95%B4%E5%BD%A2%E3%81%99%E3%82%8B)
+- 5.3.7. [カレンダーを生成する](https://github.com/pp203/PythonStudy/tree/main/SelfStudy/Chapter05/StudyNote#537-%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%82%92%E7%94%9F%E6%88%90%E3%81%99%E3%82%8B)
 
 ## 5.1. ライブラリの分類
 1. 型と関数
