@@ -30,6 +30,11 @@ $ git clone https://github.com/pp203/PythonStudy.git
 ```
 ![](./palace.jpg)
 
+### リンクを挿入
+```
+[テキスト](リンク)
+```
+
 ### Markdowm で使える例
 **太文字になる**
 
@@ -40,9 +45,10 @@ $ git clone https://github.com/pp203/PythonStudy.git
 
 ### 選択した全てをコメントアウトする
 ```
-shift + /
+command + /
 ```
 
+### 箇条書き
 ```
 1. 箇条書きでできる
 2. xxx

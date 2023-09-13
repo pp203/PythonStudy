@@ -1077,14 +1077,14 @@ b'\x82\xb1\x82\xf1\x82\xc9\x82\xbf\x82\xcd'
 ## 5.3. 日付/時刻の操作
 
 datatime モジュール
-* native 型: タイムゾーンの情報を持たない
+* naive 型: タイムゾーンの情報を持たない
 * aware 型: タイムゾーンの情報を持つ
 
-| 型 | 概要 | native 型か aware 型か |
+| 型 | 概要 | naive 型か aware 型か |
 | --- | --- | --- |
-| datatime | 日付/時刻値 | タイムゾーン (tzinfo) を設定するかどうかよって native か aware か決まる |
-| date | 日付値 | 常に native |
-| time | 時刻値 | タイムゾーン (tzinfo) を設定するかどうかよって native か aware か決まる |
+| datatime | 日付/時刻値 | タイムゾーン (tzinfo) を設定するかどうかよって naive か aware か決まる |
+| date | 日付値 | 常に naive |
+| time | 時刻値 | タイムゾーン (tzinfo) を設定するかどうかよって naive か aware か決まる |
 | timezone | タイムゾーン情報 | - |
 | timedata | 時刻間隔 | - |
 
@@ -1094,32 +1094,563 @@ datatime モジュール
 ### *5.3.1. 日付/時刻値を生成する*
 ### [ 現在の日付/時刻から生成する ]
 
+now / today メソッド
+| メソッド | 概要 |
+| --- | --- |
+| datetime.today() | 現在の日時 |
+| date.today() | 今日の日付 |
+| datetime.now(tz=None) | 現在の日時 (タイムゾーン付き) |
+| datetime.utcnow() | 現在の UTC 日時 |
+
+dt_now.py
+```py
+import datetime
+
+## today メソッド
+### 現在の日時を返す
+print(datetime.datetime.today())  
+print(datetime.date.today())  ## date.today メソッドは日付のみを返す
+
+
+## now メソッド
+###　datetime 型の now メソッドは、 today メソッドと似ている
+print(datetime.datetime.now())  ## 引数がない場合は today メソッドと同じ値を返す
+print(datetime.datetime.now(
+    datetime.timezone(datetime.timedelta(hours = 9))
+))  ## tz (datetime.timezone) を指定することで aware 型を返すことが可能
+
+
+## UTC
+print(datetime.datetime.utcnow())  ## あくまで値が UTC 時刻なので、内部的には naive 型 (tz を持たない)
+print(datetime.datetime.now(datetime.timezone.utc))  ## aware 型の UTC 時刻
+
+
+## datetime.datetime.<> と 2 つの datetime が必要な理由
+### datetime というモジュールの中に datetime オブジェクトがあり、その中にメソッドがあるから
+### from datetime import datetime で 1 つで済む
+```
+
+実行結果
+```
+$ python3 dt_now.py 
+
+2023-09-08 12:49:19.191362
+2023-09-08
+2023-09-08 12:49:19.191391
+2023-09-08 12:49:19.191396+09:00
+2023-09-08 03:49:19.191548
+2023-09-08 03:49:19.191552+00:00
+```
+
+
+### [ 指定された年月日、時分秒から生成する ]
+
+datetime / date / time コンストラクター
+```py
+## メモ: fold = 夏時間を加味するか
+
+## datetime
+datetime(
+  year,
+  month,
+  day,
+  hour = 0,
+  minute = 0,
+  second = 0,
+  microsecond = 0,
+  tzinfo = None,
+  *,
+  fold = 0
+)
+
+## date
+date(
+  year,
+  month,
+  day
+)
+
+## time
+time(
+  hour = 0,
+  minute = 0,
+  second = 0,
+  microsecond = 0,
+  tzinfo = None,
+  *,
+  fold = 0
+)
+```
+
+dt_construct.py
+```py
+import datetime
+
+## datetime / time のみが aware 型を生成できる
+
+print(datetime.datetime(2023, 9, 1, 13, 30, 35, 500))
+
+## aware 型の生成が可能
+print(datetime.datetime(2023, 9, 1, 13, 30, 35, 500,
+datetime.timezone(datetime.timedelta(hours = 9))))
+
+print(datetime.date(2023, 9, 1))
+
+print(datetime.time(13, 30, 35, 500))
+
+## aware 型の生成が可能
+print(datetime.time(13, 30, 35, 500,
+datetime.timezone(datetime.timedelta(hours = 9))))
+
+
+## エラーになる。
+## 月は 1 ~ 12 であり、繰り上がり「2024 年 01 月」ということにはならない。
+print(datetime.datetime(2023, 13, 1, 13, 30, 35, 500))
+
+
+## combine メソッドで既存の date / time / tz オブジェクトを組み合わせて datetime オブジェクトの生成も可能
+d = datetime.date(2023, 9, 1)
+t = datetime.time(13, 30, 35, 500)
+tz = datetime.timezone(datetime.timedelta(hours = 9))
+
+print(datetime.datetime.combine(d, t, tz))
+```
+
+実行結果
+```
+$ python3 dt_construct.py
+
+2023-09-01 13:30:35.000500
+2023-09-01 13:30:35.000500+09:00
+2023-09-01
+13:30:35.000500
+13:30:35.000500+09:00
+
+Traceback (most recent call last):
+  File "dt_construct.py", line 21, in <module>
+    print(datetime.datetime(2023, 13, 1, 13, 30, 35, 500))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: month must be in 1..12
+
+2023-09-01 13:30:35.000500+09:00
+```
+
+
+### [ 日付/時刻文字列から変換する ]
+strptime メソッド：日付 / 時刻文字列を指定の形式で解析し、datetime オブジェクトを生成する
+
+```py
+datetime.strptime(date_string, format)
+
+## date_string：日付文字列
+## format：解析に利用する書式
+```
+
+dt_parse.py
+```py
+import datetime
+from datetime import datetime
+
+dt1 = datetime.strptime('2023/9/1 13:30:35', '%Y/%m/%d %H:%M:%S')
+print(dt1)
+
+
+## fromisoformat メソッド
+### 年月日は必須であり、桁数もそれぞれ指定の桁で 0 埋めする必要がある
+dt2 = datetime.fromisoformat('2023-09-01 13:30:35+09:00')
+print(dt2)
+```
+
+実行結果
+```
+$ python3 dt_parse.py
+
+2023-09-01 13:30:35
+2023-09-01 13:30:35+09:00
+```
+
+
+### [ タイムスタンプ値から生成する ]
+fromtimestamp メソッド：タイムスタンプ値から日付 / 時刻値を生成できる
+
+```py
+datetime.fromtimestamp(timestammp, tz = None)
+datetime.fromtimestamp(timestamp)
+
+## timestamp：タイムスタンプ値
+## tz：タイムゾーン
+```
+
+dt_timestamp.py
+```py
+import datetime
+from datetime import datetime, timezone, date
+
+dt = datetime.now(timezone.utc)
+ts = dt.timestamp()
+
+## tz なしで呼び出しているので datetime オブジェクトは naive
+print(datetime.fromtimestamp(ts))
+print(datetime.fromtimestamp(ts, timezone.utc))
+
+print(date.fromtimestamp(ts))  ## date オブジェクトでは tz は指定できない
+```
+
+
+### [ 一部の要素を置くかえた日付を生成する ]
+replace メソッド：既存の datetime / date / time オブジェクトから特定の要素をかく変えて新しい datetime / date / time オブジェクトが可能
+
+```py
+## dt
+dt.replace(
+  year = self.year,
+  month = self.month,
+  day = self.day,
+  hour = self.hour,
+  minute = self.minute,
+  second = self.second,
+  microsecond = self.micsrosecond,
+  tzinfo = self.tzinfo,
+  *,
+  fold = 0
+)
+
+
+## dat
+dat.replace(
+  year = self.year,
+  month = self.month,
+  day = self.day,
+)
+
+
+## tim
+tim.replace(
+  year = self.year,
+  month = self.month,
+  day = self.day,
+  hour = self.hour,
+  minute = self.minute,
+  second = self.second,
+  microsecond = self.micsrosecond,
+  tzinfo = self.tzinfo,
+  *,
+  fold = 0
+)
+```
+
+dt_replace.py
+```py
+import datetime
+from datetime import datetime
+
+dt1 = datetime(2023, 9, 1, 13, 30, 35, 500)
+dt2 = dt1.replace(day =11, minute = 40)  ## 引数名 = 値
+
+print(dt1)
+print(dt2)
+```
+
+実行結果
+```
+$ python3 dt_replace.py
+
+2023-09-01 13:30:35.000500
+2023-09-11 13:40:35.000500
+```
 
 ---
 
 ### *5.3.2. 年月日、時分秒などの時刻要素を取得する*
 
+日付 / 時刻要素を取得するための属性
+| 属性 | 概要 |
+| --- | --- |
+| year | 年 |
+| month | 月 (1 ~ 12) |
+| day | 日 (1 ~ 31) |
+| hour | 時 (0 ~ 23) |
+| minute | 分 (0 ~ 59) |
+| second | 秒 (0 ~ 59) |
+| microsecond | マイクロ秒 (0 ~ 999999) |
+| tzinfo | タイムゾーン (timezone 型) |
+
+dt_get.py
+```py
+import datetime
+from datetime import datetime, timezone
+
+dt = datetime.now(timezone.utc)
+
+print(dt)
+print(dt.year)
+print(dt.month)
+print(dt.day)
+print(dt.hour)
+print(dt.minute)
+print(dt.second)
+print(dt.microsecond)
+```
+
+実行結果
+```
+$ python3 dt_get.py
+
+2023-09-11 02:33:24.110898+00:00
+2023
+9
+11
+2
+33
+24
+110898
+UTC
+```
+
+日付 / 時刻要素を取得するためのメソッド
+| メソッド | 概要 |
+| --- | --- |
+| date() | 日付部分を取得 |
+| time() | 時刻部分を取得 (naive) |
+| timetz() | 時刻部分を取得 (aware) | 
+| timestamp() | タイムスタンプ値を取得 |
+| toordinal() | 西暦 1 年 1 月 1 日から通算日 |
+| weekday() | 曜日を取得 (0：月~6：日) |
+| isoweekday() | 曜日を取得 (1：月~7：日) |
+| isocalendar() | 「ISO 年、ISO 週番号、ISO 曜日」のタプルを取得 |
+
+dt_get2.py
+```py
+import datetime
+from datetime import datetime, timezone
+
+dt = datetime.now(timezone.utc)
+
+print(dt)
+print(dt.date())
+print(dt.time())
+print(dt.timetz())
+print(dt.timestamp())
+print(dt.toordinal())
+print(dt.weekday())
+print(dt.isoweekday())
+print(dt.isocalendar())
+```
+
+実行結果
+```
+$ python dt_get2.py
+
+2023-09-11 03:39:15.256976+00:00
+2023-09-11
+03:39:15.256976
+03:39:15.256976+00:00
+1694403555.256976
+738774
+0
+1
+datetime.IsoCalendarDate(year=2023, week=37, weekday=1)
+```
 
 ---
 
 ### *5.3.3. 日付/時刻を加算/減算する*
 
+datetime モジュールの「+」「-」で加算 / 減算できる
+```py
+dt + delta
+dt - delta
+
+## dt：日付 / 時刻値 (datetime/date/time)
+## delta：加算 / 減算する (timedelta)
+```
+
+dt_plus.py
+```py
+import datetime
+from datetime import datetime, timedelta
+
+dt = datetime(2023, 9, 1, 15, 30, 35, 500)
+dt_p = dt + timedelta(days = 10, hours = 20)
+dt_m = dt - timedelta(weeks = 3)
+
+print(dt)    ## 結果：2023-09-01 15:30:35.000500
+print(dt_p)  ## 結果：2023-09-12 11:30:35.000500
+print(dt_m)  ## 結果：2023-08-31 15:30:35.00050
+```
+
+timedelta コンストラクター
+```py
+timedelta(days = 0, weeks = 0, hours = 0, minutes = 0, seconds = 0, microseconds = 0, milliseconds = 0)
+```
+
+→ replace メソッドと同じで「日時要素 = 値」形式のキーワード引数として表す。
 
 ---
 
 ### *5.3.4. 日付/時刻値の差分を求める*
 
+datetime/date/time は「-」演算で互いの差を求めることが可能
+```py
+dt1 - dt2
+
+## dt1/dt2：日付 / 時刻値 (datetime/date/time)
+```
+
+dt_diff.py
+```py
+import datetime
+from datetime import datetime
+
+dt1 = datetime(2023, 9, 1, 15, 30, 35, 500)
+dt2 = datetime(2023, 11, 23, 20, 00, 20, 300)
+
+delta = dt2 - dt1
+
+
+# 文字列化した差分
+print(delta)  ## 結果：83 days, 4:29:44.999800
+
+
+# 日数、秒数のみを取り出すこともできる
+print(delta.days)     ## 結果：83
+print(delta.seconds)  ## 結果：16184
+```
 
 ---
 
 ### *5.3.5. 日付/時刻値を比較する*
 
+「<」「>」などの比較演算子から日付 / 時刻のいずれかが過去 / 未来かを判定できる
+
+dt_compare.py
+```py
+import datetime
+from datetime import datetime
+
+dt1 = datetime(2023, 9, 15, 20, 30, 50, 500)
+dt2 = datetime(2020, 5, 13, 3, 15, 50, 500)
+
+
+# dt1 は dt2 より大きい = dt1 は dt2 よりも未来である
+print(dt1 > dt2)  ## 結果：True
+```
 
 ---
 
 ### *5.3.6. 日付/時刻値を整形する*
 
+strftime メソッドで日付 / 時刻値を整形する
+```py
+dt.strftime(format)
+
+## dt：日付 / 時刻値 (datetime/date/time)
+## format：書式文字列
+```
+
+日付を整形するための指定子 (2020-02-09 16:24:39.000351+00:00 の場合)
+| 分類 | 指定子 | 概要 | 例 |
+| --- | --- | --- | --- |
+| 標準 | %c | 日時 | Sun Feb 9 16:24:39 2020 |
+| 標準 | %x | 日付 | 02/09/20 |
+| 標準 | %X | 時間 | 16:24:39 |
+| カスタム | %y | 西暦 (2 桁) | 20 |
+| カスタム | %Y | 西暦 (4 桁) | 2020 |
+| カスタム | %b | 月名 (短縮形) | Feb |
+| カスタム | %B | 月名 | Febrary |
+| カスタム | %m | 月 (0 埋め。01 ~ 12) | 02 |
+| カスタム | %d | 日 (0 埋め。01 ~ 31) | 09 |
+| カスタム | %a | 曜日名 (短縮形) | Sun |
+| カスタム | %A | 曜日名 | Sunday |
+| カスタム | %w | 曜日 (0：日 ~ 6：土) | 0 |
+| カスタム | %H | 時間 (24 時間。0 埋め。00 ~ 23) | 16 |
+| カスタム | %U | 時間 (12 時間。0 埋め。01 ~ 12) | 04 |
+| カスタム | %p | 午前 / 午後 | PM |
+| カスタム | %M | 分 (0 埋め。00 ~ 59) | 24 |
+| カスタム | %S | 秒 (0 埋め。00 ~ 59) | 39 |
+| カスタム | %f | マイクロ秒 (0 埋め。000000 ~ 999999) | 000351 |
+| カスタム | %z | タイムゾーン (オフセット値) | +0000 |
+| カスタム | %Z | タイムゾーンの名前 | UTC |
+| カスタム | %j | 年内の通算日 (001 ~ 366) | 040 |
+| カスタム | %U | 年内の週番号 (週の始めは日曜。00 ~ 53) | 06 |
+| カスタム | %W | 年内の週番号 (週の始めは月曜。00 ~ 53) | 05 |
+| カスタム | %% | 文字 '%' | % |
+
+dt_format.py
+```py
+import datetime
+import locale
+
+
+# setlocale メソッドで明示的にロケールを設定
+locale.setlocale(locale.LC_ALL, 'ja_JP.UTF-8')
+
+dt = datetime.datetime(2023, 9, 1, 15, 30, 35, 500)
+
+print(dt)  ## 結果：2023-09-01 15:30:35.000500
+
+
+# 単体でまとまった日付 / 時刻を表現できる
+print(dt.strftime('%c'))  ## 結果：金  9/ 1 15:30:35 2023
+print(dt.strftime('%x'))  ## 結果：2023/09/01
+print(dt.strftime('%X'))  ## 結果：15時30分35秒
+
+
+# 標準スタイルで対応できない場合は、指定子を組み合わせて独自の書式を組み合わせることもできる
+print(dt.strftime('%Y 年 %m 月 %d 日 %I 時 %M 分'))  ## 結果：2023 年 09 月 01 日 03 時 30 分
+```
+
+setlocale メソッド
+```py
+setlocale(category, locale = None)
+
+## category：設定する対象 (設定値は以下)
+## locale：ロケール値 (地域値.文字コード)
+```
+
+引数 category の設定値
+| 分類 | 概要 |
+| --- | --- |
+| LC_ALL | すべて |
+| LC_CTYPE | 文字タイプ (string などに影響) |
+| LC_TIME | 時刻 (strftime などに影響) |
+| LC_NUMERIC | 数値 (format などに影響) |
+| LC_MONETARY | 通貨 |
+| LC_MESSAGE | メッセージ |
 
 ---
 
 ### *5.3.7. カレンダーを生成する*
+
+cal_month.py
+```py
+import calendar
+
+
+# 2023, 9, 1 = 年, 月, 1 日を表す文字幅
+print(calendar.month(2023, 9, 1))
+
+##    September 2023
+## Mo Tu We Th Fr Sa Su
+##              1  2  3
+##  4  5  6  7  8  9 10
+## 11 12 13 14 15 16 17
+## 18 19 20 21 22 23 24
+## 25 26 27 28 29 30
+
+
+print(calendar.month(2023, 9, 5))
+
+##               September 2023
+##  Mon   Tue   Wed   Thu   Fri   Sat   Sun
+##                            1     2     3
+##    4     5     6     7     8     9    10
+##   11    12    13    14    15    16    17
+##   18    19    20    21    22    23    24
+##   25    26    27    28    29    30
+
+
+print(calendar.monthcalendar(2023,9))
+
+## [[0, 0, 0, 0, 1, 2, 3], [4, 5, 6, 7, 8, 9, 10], [11, 12, 13, 14, 15, 16, 17], [18, 19, 20, 21, 22, 23, 24], [25, 26, 27, 28, 29, 30, 0]]
+```

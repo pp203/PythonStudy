@@ -23,3 +23,59 @@ print(c)
 
 d = ('&'.join(c))
 print(d)
+
+
+# 練習問題 5.3.
+## 1. 現在の日時を取得し、そこから「月」と「分」だけを表示せよ。
+
+import datetime
+from datetime import datetime,timezone
+
+dt = datetime.now()
+
+print(dt)
+print(dt.month)
+print(dt.minute)
+
+
+# この章の理解度チェック
+## 1. 空欄を埋めよ。
+### 型とは、コードの中で扱える値の種類を決めるための仕組みです。
+### 型に具体的な値を与えて、コードの中で利用できるようにすることを「インスタンス化」、型に基づいて作られた具体的な値のことを「インスタンス」と呼びます。
+### 例えば、datetime.date 型の「インスタンス」を生成するには「datetime.date(2020, 6, 25)」と書きます。
+### 型に属する関数のことを「メソッド」と呼び、「インスタンス.メソッド (...)」の形式で呼び出せます。
+
+## 2. 空欄に対応する式を埋めて図を完成せよ。
+print(title[2])
+print(title[2:5])
+print(title[2:])
+print(title[-7:-5])
+print(title[::2])
+
+## 3. コードを完成せよ。
+import datetime
+import locale
+
+locale.setlocal(local.LC_ALL, 'ja_JP.UTF-8')
+dt = datetime.datetime(2020, 12, 4, 11, 37, 20, 0, datetime.timezone(datetime.timedelta(hours = 9)))
+
+print(dt.strftime('%Y 年 %m 月 %d 日 %I 時'))
+
+## 4. 以下のコードを書いてみよ。
+### 4.1. 文字列「となりのきゃくはよくきゃくくうきゃくだ」の最後の「きゃく」の位置を検索
+
+### 4.2. 文字列「◯◯の気温は◯◯°Cです」に「千葉」「17,256」を埋め込む。しかし、数値は小数点以下 2 桁まで表示
+
+### 4.3. 文字列「彼女の名前は花子」の「彼女」を「妻」に置き換える
+
+dt = '彼女の名前は花子'
+print(dt.replace('彼女', '妻'))
+
+### 4.4. 現在の日時を基点に 5 日と 6 時間後の日時を求める
+
+
+### 4.5. 2020 年 10 月のカレンダーを日曜日始まりで文字幅 5 で出力
+
+import calendar
+
+print(calendar.month(2020, 10, 5))
